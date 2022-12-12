@@ -1,0 +1,61 @@
+$directions-simple: t r b l;
+$directions-real: top right bottom left;
+
+body,
+html {
+  color: var(--color-ffffff) !important;
+  background: var(--color-0d0e0e) !important;
+}
+
+@each $direction in $directions-simple {
+  @for $value from 1 through 400 {
+    $i: index($directions-simple, $direction);
+    $obj: nth($directions-real, $i);
+
+    .m#{$direction}-#{$value} {
+      margin-#{$obj}: #{$value}px;
+    }
+
+    .p#{$direction}-#{$value} {
+      padding-#{$obj}: #{$value}px;
+    }
+
+    body.mobile {
+      .m#{$direction}-#{$value} {
+        margin-#{$obj}: #{$value}Px;
+      }
+
+      .p#{$direction}-#{$value} {
+        padding-#{$obj}: #{$value}Px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  :root {
+    --contentWidth: 90%;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  :root {
+    --contentWidth: 1280px;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  :root {
+    --contentWidth: 1600px;
+  }
+}
+
+@font-face {
+  font-family: "AbhayaLibre";
+  src: url("../fonts/AbhayaLibre-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Impact";
+  src: url("../fonts/impact.ttf") format("truetype");
+}

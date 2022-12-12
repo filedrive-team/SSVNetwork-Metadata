@@ -1,0 +1,25 @@
+.emptyWrap {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 100px;
+
+  img {
+    width: 220rem;
+    margin-bottom: 5px;
+  }
+
+  :global {
+    .ant-btn {
+      margin-top: 30px;
+      width: 220px;
+      height: 42px;
+      background: #164aff;
+      border-radius: 23px;
+      box-shadow: 0px 2px 4px 0px rgba(22, 74, 255, 0.58);
+      border: none;
+    }
+  }
+}

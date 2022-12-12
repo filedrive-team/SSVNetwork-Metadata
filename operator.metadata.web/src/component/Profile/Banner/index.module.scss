@@ -1,0 +1,74 @@
+.bannerWrap {
+  position: relative;
+  height: 410px;
+  width: 100%;
+
+  .bg {
+    position: absolute;
+    width: 100%;
+    height: 546px;
+
+    .vertical {
+      position: absolute;
+      width: 358px;
+      height: 530px;
+      opacity: 0.1;
+      background: #112dd6;
+      border-radius: 50%;
+      filter: blur(50px);
+    }
+
+    .horizontal {
+      position: absolute;
+      width: 594px;
+      height: 321px;
+      opacity: 0.1;
+      background: #112dd6;
+      border-radius: 50%;
+      filter: blur(50px);
+      left: 98px;
+      top: 0;
+    }
+
+    .right {
+      position: absolute;
+      width: 594px;
+      height: 594px;
+      opacity: 0.08;
+      background: #112dd6;
+      border-radius: 50%;
+      filter: blur(50px);
+      top: 132px;
+      right: 0px;
+    }
+  }
+
+  .contentWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px auto;
+    height: 100%;
+
+    @media screen and (max-width: 960px) {
+      max-width: 800px;
+    }
+
+    @media screen and (max-width: 1440px) and (min-width: 960px) {
+      max-width: 960px;
+    }
+
+    @media screen and (min-width: 1441px) {
+      max-width: 1280px;
+    }
+
+    & > span {
+      font-size: 55rem;
+      font-family: Impact;
+    }
+
+    & > img {
+      width: 240rem;
+    }
+  }
+}

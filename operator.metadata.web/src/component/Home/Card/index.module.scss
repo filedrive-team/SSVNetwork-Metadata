@@ -1,0 +1,90 @@
+.cardWrap {
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  background: var(--color-131518);
+  border: 1px solid;
+  border-image: linear-gradient(
+      180deg,
+      var(--color-35383f),
+      var(--color-515660) 50%,
+      var(--color-1b1d21) 98%
+    )
+    1 1;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 30rem 30rem 30rem 30rem;
+
+  .id {
+    display: flex;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    line-height: 28px;
+  }
+
+  .topWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > :last-child {
+      display: flex;
+      width: 50px;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 14px;
+      }
+    }
+  }
+
+  .bottomWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    line-height: 14px;
+
+    .title {
+      color: var(--color-ffffff-40);
+    }
+
+    .value {
+      color: var(--color-ffffff);
+    }
+
+    .big {
+      img {
+        width: 50px;
+        border-radius: 25px;
+      }
+    }
+
+    .bottomLeft {
+      .itemWrap {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      & > :last-child {
+        margin-top: 20rem;
+      }
+    }
+
+    & > :last-child {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+}
+
+.cardWrap:hover {
+  transform: scale(1.01);
+}

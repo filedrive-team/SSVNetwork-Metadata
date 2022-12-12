@@ -1,0 +1,41 @@
+.headerWrap {
+  position: fixed;
+  background: transparent;
+  height: 100px;
+  width: 100%;
+  z-index: 100;
+
+  .headerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 1440px;
+
+    @media screen and (max-width: 960px) {
+      max-width: 600px;
+    }
+
+    @media screen and (max-width: 1280px) {
+      max-width: 960px;
+    }
+
+    :global {
+      .ant-btn {
+        height: 42px;
+        background: #164aff;
+        font-size: 16px;
+        border-radius: 21px;
+        border: none;
+      }
+    }
+  }
+
+  :global {
+    .animate__slideOutRight,
+    animate__slideInRight {
+      animation-fill-mode: forwards;
+    }
+  }
+}

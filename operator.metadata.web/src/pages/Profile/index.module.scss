@@ -1,0 +1,196 @@
+.formWrap {
+  position: relative;
+  background: #212226;
+  border: 1px solid #505054;
+  border-radius: 4px;
+  box-shadow: 0px 2px 24px 0px #030a36;
+  padding: 0px 40px 26px 30px;
+  margin: 0 auto;
+  max-width: 1000px;
+
+  @media screen and (max-width: 960px) {
+    max-width: 600px;
+  }
+
+  @media screen and (max-width: 1280px) {
+    max-width: 960px;
+  }
+
+  .formTopWrap {
+    display: flex;
+    justify-content: space-between;
+
+    .textWrap {
+      display: flex;
+      margin-top: 44px;
+
+      & > :nth-child(2) {
+        margin-left: 210px;
+      }
+
+      .text {
+        font-size: 30px;
+        color: var(--color-ffffff);
+        font-weight: 700;
+        line-height: 52px;
+        position: relative;
+      }
+
+      .text::before {
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: 500;
+        position: absolute;
+        top: -32px;
+      }
+
+      .name::before {
+        content: "Operator Name";
+        flex-shrink: 0;
+      }
+
+      .id::before {
+        content: "Operator ID";
+      }
+    }
+  }
+
+  .logoWrap {
+    position: absolute;
+    top: 35rem;
+    right: 40rem;
+  }
+
+  .logoWrap.custom {
+    position: relative;
+    right: auto;
+    width: fit-content;
+  }
+
+  .logoContent {
+    height: 60px;
+    aspect-ratio: 1;
+    border: 1px solid var(--color-164AFF);
+    border-radius: 50%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    svg {
+      position: absolute;
+      right: 4px;
+      bottom: 6px;
+    }
+  }
+
+  .formContent {
+    display: grid;
+    grid-auto-flow: column;
+    margin-top: 54px;
+
+    @media screen and (max-width: 960px) {
+      grid-template-columns: repeat(1, 1fr);
+      grid-template-rows: repeat(11, 1fr);
+    }
+
+    @media screen and (min-width: 961px) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+    }
+
+    grid-gap: 4px 100px;
+
+    .itemWrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      overflow: visible;
+      position: relative;
+
+      :global {
+        .ant-form-item {
+          width: 100%;
+
+          .ant-form-item-explain-error {
+            display: flex;
+          }
+        }
+      }
+
+      & > :first-child {
+        display: flex;
+        content: attr(data-title);
+        color: var(--color-ffffff-60);
+        font-size: 14px;
+        padding-bottom: 5px;
+      }
+
+      & > :first-child:after {
+        content: attr(data-option);
+        font-size: 14px;
+        color: red;
+        display: flex;
+        padding-top: 2px;
+        box-sizing: border-box;
+        padding-left: 5px;
+      }
+
+      :global {
+        .ant-input {
+          position: relative;
+          height: 45px;
+          background: #373840;
+          color: white;
+          border-color: #747474;
+          width: 100%;
+        }
+
+        .ant-input:focus {
+          border: 1px solid #305fff;
+          box-shadow: 0 0 0 3px rgba(48, 95, 255, 0.2);
+        }
+
+        .ant-input:hover {
+          background: #373840;
+          border-color: #305fff;
+        }
+
+        .ant-input-disabled[disabled] {
+          color: var(--color-ffffff-60);
+        }
+
+        .ant-input-disabled[disabled]:hover {
+          border-color: #747474;
+        }
+      }
+    }
+  }
+
+  .buttonWrap {
+    display: grid;
+    margin-top: 48px;
+    grid-gap: 58px 100px;
+
+    @media screen and (max-width: 960px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media screen and (min-width: 961px) {
+      grid-template-columns: repeat(2, 1fr);
+      margin-right: 150px;
+    }
+
+    :global {
+      .ant-btn-primary {
+        margin-top: 10px;
+        height: 42px;
+        background: var(--color-164AFF);
+        box-shadow: 0px 2px 4px 0px rgba(22, 74, 255, 0.58);
+        border-color: transparent;
+      }
+    }
+  }
+}

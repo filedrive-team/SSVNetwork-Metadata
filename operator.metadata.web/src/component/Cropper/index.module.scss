@@ -1,0 +1,114 @@
+.cropperWrap {
+  .close {
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    img {
+      cursor: pointer;
+    }
+  }
+
+  .cropperBox {
+    &::before {
+      position: absolute;
+      content: "";
+      background: #13121c;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: 1px;
+      border-radius: 10px;
+    }
+
+    background: linear-gradient(
+      136deg,
+      rgba(198, 231, 254, 0.51) 3%,
+      #2191f9 17%,
+      #1b52ff 47%,
+      #8d73fe 83%,
+      rgba(165, 188, 254, 0.53) 98%
+    );
+    border-radius: 10px;
+    padding: 40px 50px 0px 50px;
+  }
+
+  :global {
+    .cropper-view-box,
+    .cropper-face {
+      border-radius: 50%;
+    }
+  }
+
+  .cropperBg {
+    background: linear-gradient(
+      136deg,
+      #c6e7fe,
+      #2191f9 17%,
+      #1b52ff 47%,
+      #8d73fe 83%,
+      #a5bcfe 98%
+    );
+    position: relative;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 1px;
+
+    .cropper {
+      position: relative;
+      z-index: 2;
+      border-radius: 10px;
+      box-sizing: border-box;
+
+      :global {
+        .cropper-modal {
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+
+  .cropperBg::before {
+    position: absolute;
+    content: "";
+    border: 1px dashed #13121c;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 10px;
+  }
+
+  .cropperBg::after {
+    position: absolute;
+    content: "";
+    background: #13121c;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 1px;
+    border-radius: 10px;
+  }
+
+  .bottomWrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 30rem;
+    padding-bottom: 30rem;
+    position: relative;
+
+    & > button {
+      font-size: 16rem;
+      height: 42rem;
+      width: 120px;
+      border-radius: 21rem;
+      background: #164aff;
+      color: white;
+      border: none;
+      box-shadow: 0px 2px 4px 0px rgba(22, 74, 255, 0.58);
+    }
+  }
+}

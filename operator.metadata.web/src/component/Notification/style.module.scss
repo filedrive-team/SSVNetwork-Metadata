@@ -1,0 +1,16 @@
+:global {
+  .notify-wrap {
+    .message {
+      color: var(--color-ffffff);
+    }
+
+    .description {
+      color: var(--color-ffffff);
+      opacity: 0.5;
+    }
+
+    .anticon.anticon-close.ant-notification-notice-close-icon {
+      color: var(--color-ffffff);
+    }
+  }
+}
