@@ -43,3 +43,14 @@
   font-size: 30rem;
   background: gray;
 }
+
+.custom-input-wrap {
+  .ant-input {
+    &:hover {
+      border-color: #305fff;
+    }
+    &:focus {
+      border-color: #305fff;
+    }
+  }
+}

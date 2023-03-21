@@ -9,6 +9,7 @@ import { observer } from 'mobx-react';
 import { Cookies } from '@/data/cookies';
 import { useHistory } from 'react-router';
 import { RouterPath } from '@/router/RouterConfig';
+import homeStore from '@/store/modules/home';
 const Header = () => {
   const history = useHistory();
   console.log('=====++==', mainStore.accounts);
@@ -38,6 +39,7 @@ const Header = () => {
         <div
           style={{ cursor: 'pointer' }}
           onClick={() => {
+            homeStore.SET_IS_SEARCH(false);
             history.push(RouterPath.home);
           }}
         >

@@ -64,6 +64,7 @@ const Card = (props: CardProps) => {
                 src={process.env['REACT_APP_GATEWAY']! + info?.logo ?? ''}
                 placeholder={<img src={OperatorInfoDialogLogo} alt="" />}
                 fallback={OperatorInfoDialogLogo}
+                preview={false}
               />
             </div>
           </div>

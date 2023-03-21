@@ -5,7 +5,7 @@ import '@/assets/styles/main.scss';
 import '@/assets/styles/var.scss';
 import { Provider } from 'mobx-react';
 import * as stores from './store';
-import 'antd/dist/antd.min.css';
+import 'antd/dist/reset.css';
 import App from './App';
 import 'animate.css';
 ReactDOM.render(

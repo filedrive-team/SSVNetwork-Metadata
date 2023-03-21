@@ -1,8 +1,19 @@
 import { updateOperator } from '@/api/modules/operator';
 import IModalCropper from '@/component/Cropper/IModalCropper';
 import Banner from '@/component/Profile/Banner';
-import { Button, Input, Form, Upload, UploadProps } from 'antd';
-import { useEffect, useState } from 'react';
+
+import {
+  Button,
+  Input,
+  Form,
+  Upload,
+  UploadProps,
+  Checkbox,
+  Row,
+  Col,
+  Select,
+} from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import { ReactComponent as Add } from '@/assets/svg/profile/avatar_add.svg';
@@ -12,7 +23,20 @@ import chainStore from '@/store/modules/chain';
 import { checkNetwork } from '@/utils/metamask';
 import _ from 'lodash';
 import notify from '@/component/Notification';
+import {
+  cloudProviderData,
+  consensusClientData,
+  executionClientData,
+  locationData,
+  relaysSupportedData,
+} from '@/utils/json';
 
+enum inputType {
+  input = 'input',
+  textarea = 'textarea',
+  select = 'select',
+  checkbox = 'checkbox',
+}
 // @ts-ignore
 const { ethereum } = window;
 const Profile = (props) => {
@@ -20,6 +44,8 @@ const Profile = (props) => {
   const [file, setFile] = useState<File>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
+  const [mev, setMev] = useState(false);
+  const otherProvideRef = useRef(null);
   const [form, setForm] = useState<
     (
       | {
@@ -64,6 +90,8 @@ const Profile = (props) => {
     website_url: '',
     discord_url: '',
     telegram_url: '',
+    mev_bost_enabled: false,
+    relays_supported: [],
   });
 
   const _form: {
@@ -71,14 +99,37 @@ const Profile = (props) => {
     option?: string;
     key: string;
     type: number;
+    inputType: string;
+    selectData?: any[];
+    showSearch?: boolean;
+    maxLength?: number;
+    filterOption?: (e: any, i: any) => any[];
+    dropdownRender?: (v: any, i: any) => any;
     defaultValue?: (v: any) => number;
     onChange: (e: any, i: any) => void;
   }[] = [
+    {
+      name: 'Name',
+      option: '*',
+      key: 'name',
+      type: 1,
+      maxLength: 140,
+      inputType: inputType.textarea,
+      defaultValue: function (v) {
+        return v.name;
+      },
+      onChange: function (e, i) {
+        i.name = e.target.value;
+        setOperatorInfo(i);
+      },
+    },
     {
       name: 'Description',
       option: '*',
       key: 'description',
       type: 1,
+      maxLength: 140,
+      inputType: inputType.textarea,
       defaultValue: function (v) {
         return v.description;
       },
@@ -92,11 +143,13 @@ const Profile = (props) => {
       option: '*',
       key: 'eth2_node_client',
       type: 1,
+      inputType: inputType.select,
+      selectData: consensusClientData,
       defaultValue: function (v) {
         return v.eth2_node_client;
       },
-      onChange: function (e, i) {
-        i.eth2_node_client = e.target.value;
+      onChange: function (value, i) {
+        i.eth2_node_client = value;
         setOperatorInfo(i);
       },
     },
@@ -105,11 +158,13 @@ const Profile = (props) => {
       option: '*',
       key: 'eth1_node_client',
       type: 1,
+      inputType: inputType.select,
+      selectData: executionClientData,
       defaultValue: function (v) {
         return v.eth1_node_client;
       },
-      onChange: function (e, i) {
-        i.eth1_node_client = e.target.value;
+      onChange: function (value, i) {
+        i.eth1_node_client = value;
         setOperatorInfo(i);
       },
     },
@@ -118,11 +173,70 @@ const Profile = (props) => {
       option: '*',
       key: 'cloud_provider',
       type: 1,
+      inputType: inputType.select,
+      selectData: cloudProviderData,
       defaultValue: function (v) {
         return v.cloud_provider;
       },
-      onChange: (e, i) => {
-        i.cloud_provider = e.target.value;
+      dropdownRender: function (menu, i) {
+        return (
+          <>
+            {menu}
+            <div
+              onClick={() => {
+                const el = document.getElementById('othersCloudProvider');
+                if (el) {
+                  el.style.display = 'block';
+                }
+                const _input = otherProvideRef.current;
+                if (_input) {
+                  //@ts-ignore
+                  _input.focus();
+                  console.log(_input, '_input89');
+                }
+              }}
+              style={{
+                padding: '5px 12px',
+                cursor: 'pointer',
+                borderTop: '1px solid #eee',
+              }}
+            >
+              others
+            </div>
+            <div
+              id="othersCloudProvider"
+              style={{ padding: '5px 12px', display: 'none' }}
+              className="custom-input-wrap"
+            >
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input ref={otherProvideRef}></input>
+                <Button
+                  type="primary"
+                  style={{ background: '#164aff', margin: '0 0 0 20px' }}
+                  onClick={() => {
+                    const _input = otherProvideRef.current;
+                    console.log(_input, '_input123');
+                    if (_input) {
+                      const _value = _.get(_input, 'value', '');
+                      i.cloud_provider = _value;
+                      setOperatorInfo(i);
+                      formInstance.setFieldsValue(i);
+                      const el = document.getElementById('othersCloudProvider');
+                      if (el) {
+                        el.style.display = 'none';
+                      }
+                    }
+                  }}
+                >
+                  Confirm
+                </Button>
+              </div>
+            </div>
+          </>
+        );
+      },
+      onChange: (value, i) => {
+        i.cloud_provider = value;
         setOperatorInfo(i);
       },
     },
@@ -131,18 +245,41 @@ const Profile = (props) => {
       option: '*',
       key: 'location',
       type: 1,
+      inputType: inputType.select,
+      selectData: locationData,
+      showSearch: true,
+      filterOption: function (input, option) {
+        return (option?.value ?? '')
+          .toLowerCase()
+          .includes(input.toLowerCase());
+      },
       defaultValue: function (v) {
         return v.location;
       },
-      onChange: (e, i) => {
-        i.location = e.target.value;
+      onChange: (value, i) => {
+        i.location = value;
         setOperatorInfo(i);
+      },
+    },
+    {
+      name: 'MEV Bost Enabled',
+      key: 'mev_bost_enabled',
+      type: 1,
+      inputType: inputType.checkbox,
+      defaultValue: function (v) {
+        return v.mev_bost_enabled;
+      },
+      onChange: function (e, i) {
+        i.mev_bost_enabled = e.target.checked;
+        setOperatorInfo(i);
+        setMev(e.target.checked);
       },
     },
     {
       name: 'Website',
       key: 'website_url',
       type: 1,
+      inputType: inputType.input,
       defaultValue: function (v) {
         return v.website_url;
       },
@@ -155,6 +292,7 @@ const Profile = (props) => {
       name: 'Twitter',
       key: 'twitter_url',
       type: 1,
+      inputType: inputType.input,
       defaultValue: function (v) {
         return v.twitter_url;
       },
@@ -171,6 +309,7 @@ const Profile = (props) => {
         return v.linkedin_url;
       },
       type: 1,
+      inputType: inputType.input,
       onChange: function (e, i) {
         i.linkedin_url = e.target.value;
         setOperatorInfo(i);
@@ -184,6 +323,7 @@ const Profile = (props) => {
         return v.discord_url;
       },
       type: 1,
+      inputType: inputType.input,
       onChange: function (e, i) {
         i.discord_url = e.target.value;
         setOperatorInfo(i);
@@ -196,6 +336,7 @@ const Profile = (props) => {
         return v.telegram_url;
       },
       type: 1,
+      inputType: inputType.input,
       onChange: function (e, i) {
         i.telegram_url = e.target.value;
         setOperatorInfo(i);
@@ -208,12 +349,23 @@ const Profile = (props) => {
       (window.history.state && window.history.state.state) ||
       window.history.state;
     if (s && s.info) {
-      setOperatorInfo(s.info);
+      console.log(s.info, 's.info');
+      const _relays_supported = s.info.relays_supported;
+      const _relays_supported_ = _relays_supported
+        ? _relays_supported.split(',')
+        : [];
+      console.log(_relays_supported_, '_relays_supported_');
+      setMev(s.info.mev_bost_enabled);
+      setOperatorInfo({
+        ...s.info,
+        relays_supported: _relays_supported_ || [],
+      });
 
       _form.unshift({
         name: 'Owner Address',
         key: 'owner_address',
         type: 1,
+        inputType: inputType.input,
         defaultValue: function (v) {
           return v.owner_address;
         },
@@ -222,9 +374,8 @@ const Profile = (props) => {
           setOperatorInfo(i);
         },
       });
-
       formInstance.setFieldsValue(s.info);
-
+      formInstance.setFieldValue('relays_supported', _relays_supported_);
       setForm(_form);
     }
     if (s && s.isCustom) {
@@ -235,8 +386,9 @@ const Profile = (props) => {
           option: '*',
           key: 'operator_id',
           type: 1,
+          inputType: inputType.input,
           onChange: function (e, i) {
-            i.operator_id = e.target.value;
+            i.operator_id = parseInt(e.target.value);
             setOperatorInfo(i);
           },
         });
@@ -276,10 +428,11 @@ const Profile = (props) => {
     await formInstance.validateFields();
     operatorInfo.timestamp = Date.now();
     const _sign = {
-      data: JSON.stringify(operatorInfo),
+      data: JSON.stringify({
+        ...operatorInfo,
+        relays_supported: operatorInfo.relays_supported.join(','),
+      }),
     };
-
-    console.log('====_sign=', _sign);
 
     const _signType = [{ name: 'data', type: 'string' }];
 
@@ -326,6 +479,65 @@ const Profile = (props) => {
       });
   };
 
+  const _checkBoxNode = (value) => {
+    if (mev) {
+      return (
+        <>
+          <div data-option={value.option} className={classNames('label')}>
+            Relays supported
+          </div>
+          <Form.Item
+            name="relays_supported"
+            rules={[
+              {
+                required: value.option !== undefined,
+                message: 'It is required',
+              },
+            ]}
+          >
+            <Select
+              defaultValue={operatorInfo.relays_supported}
+              mode="multiple"
+              allowClear={true}
+              maxTagCount="responsive"
+              onChange={(value) => {
+                operatorInfo.relays_supported = value;
+                console.log(value, 'value relays_supported');
+                setOperatorInfo(operatorInfo);
+              }}
+              options={relaysSupportedData}
+              dropdownRender={(menu) => {
+                return (
+                  <>
+                    {menu}
+                    <div
+                      style={{
+                        padding: '5px 12px',
+                        cursor: 'pointer',
+                        borderTop: '1px solid #eee',
+                      }}
+                      onClick={() => {
+                        const _all = relaysSupportedData.map((n) => n.value);
+                        operatorInfo.relays_supported = _all;
+                        console.log(_all, operatorInfo, 'operatorInfo 44');
+                        formInstance.setFieldValue('relays_supported', _all);
+                        setOperatorInfo(operatorInfo);
+                      }}
+                    >
+                      All
+                    </div>
+                  </>
+                );
+              }}
+            />
+          </Form.Item>
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
   const Item = ({ value }) => {
     if (!isCustom && value.key === 'owner_address') {
       return (
@@ -345,32 +557,113 @@ const Profile = (props) => {
         </div>
       );
     }
-
-    return (
-      <div className={classNames(styles.itemWrap)}>
-        <div data-option={value.option}>{value.name}</div>
-        <Form.Item
-          name={value.key}
-          rules={[
-            {
-              required: value.option !== undefined,
-              message: 'It is required',
-            },
-          ]}
-        >
-          <Input
-            defaultValue={
-              value.defaultValue !== undefined
-                ? value.defaultValue(operatorInfo)
-                : null
-            }
-            onChange={(e) => {
-              value.onChange(e, operatorInfo);
-            }}
-          />
-        </Form.Item>
-      </div>
-    );
+    const _dom = {
+      [inputType.input]: (
+        <div className={classNames(styles.itemWrap)}>
+          <div data-option={value.option}>{value.name}</div>
+          <Form.Item
+            name={value.key}
+            rules={[
+              {
+                required: value.option !== undefined,
+                message: 'It is required',
+              },
+            ]}
+          >
+            <Input
+              defaultValue={
+                value.defaultValue !== undefined
+                  ? value.defaultValue(operatorInfo)
+                  : null
+              }
+              onChange={(e) => {
+                value.onChange(e, operatorInfo);
+              }}
+            />
+          </Form.Item>
+        </div>
+      ),
+      [inputType.textarea]: (
+        <div className={classNames(styles.itemWrap)}>
+          <div data-option={value.option}>{value.name}</div>
+          <Form.Item
+            name={value.key}
+            rules={[
+              {
+                required: value.option !== undefined,
+                message: 'It is required',
+              },
+            ]}
+          >
+            <Input.TextArea
+              showCount
+              autoSize={{ minRows: 2, maxRows: 2 }}
+              defaultValue={
+                value.defaultValue !== undefined
+                  ? value.defaultValue(operatorInfo)
+                  : null
+              }
+              maxLength={value.maxLength ? value.maxLength : null}
+              onChange={(e) => {
+                value.onChange(e, operatorInfo);
+              }}
+            />
+          </Form.Item>
+        </div>
+      ),
+      [inputType.select]: (
+        <div className={classNames(styles.itemWrap)}>
+          <div data-option={value.option} className={classNames('label')}>
+            {value.name}
+          </div>
+          <Form.Item
+            name={value.key}
+            rules={[
+              {
+                required: value.option !== undefined,
+                message: 'It is required',
+              },
+            ]}
+          >
+            <Select
+              onChange={(v) => {
+                value.onChange(v, operatorInfo);
+              }}
+              value={value.defaultValue}
+              showSearch={value.showSearch}
+              filterOption={value.filterOption}
+              dropdownRender={(menu) => {
+                return value.dropdownRender
+                  ? value.dropdownRender(menu, operatorInfo)
+                  : menu;
+              }}
+              options={value.selectData}
+            />
+          </Form.Item>
+        </div>
+      ),
+      [inputType.checkbox]: (
+        <div className={classNames(styles.itemWrap, styles.checkboxWarp)}>
+          <Row gutter={20}>
+            <Col span={8}>
+              <div data-option={value.option} className={classNames('label')}>
+                {value.name}
+              </div>
+              <Form.Item name={value.key}>
+                <Checkbox
+                  defaultChecked={mev}
+                  onChange={(e) => {
+                    value.onChange(e, operatorInfo);
+                  }}
+                ></Checkbox>
+              </Form.Item>
+            </Col>
+            <Col span={16}>{_checkBoxNode(value)}</Col>
+          </Row>
+        </div>
+      ),
+    };
+    return _dom[value.inputType];
   };
 
   return (
@@ -382,9 +675,6 @@ const Profile = (props) => {
           className={classNames(styles.formTopWrap)}
         >
           <div className={styles.textWrap}>
-            <div className={classNames(styles.name, styles.text)}>
-              {operatorInfo.name}
-            </div>
             <div className={classNames(styles.id, styles.text)}>
               {operatorInfo.operator_id}
             </div>

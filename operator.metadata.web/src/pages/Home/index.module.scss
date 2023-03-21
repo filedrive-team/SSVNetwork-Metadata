@@ -34,13 +34,11 @@
 
 :global {
   .ant-modal-content {
-    background: transparent;
+    background: transparent !important;
 
     .ant-modal-body {
       padding: 0px;
     }
-
-    color: red;
   }
 }
 
@@ -62,17 +60,27 @@
   padding: 40px 45px 30px 50px;
 
   .topWrap {
-    display: flex;
-    justify-content: space-between;
+    .baseInfo {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .description {
+      margin-top: 10px;
+    }
 
     .title {
       font-size: 14px;
       margin-bottom: 10px;
+      color: #ffffff;
+      line-height: 14px;
     }
 
     .value {
       font-size: 18px;
       font-weight: bold;
+      color: #ffffff;
+      line-height: 18px;
     }
 
     .left {
@@ -96,7 +104,7 @@
     margin-top: 80px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
     grid-gap: 12px 20px;
     grid-auto-flow: column;
 
@@ -104,6 +112,7 @@
       width: fit-content;
       color: white;
       width: 100%;
+      margin-bottom: 5px;
 
       .title {
         font-size: 14px;
@@ -116,7 +125,26 @@
         flex-shrink: 0;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
       }
+    }
+  }
+
+  .rowWrap {
+    color: white;
+    width: 100%;
+    padding-top: 10px;
+
+    .title {
+      font-size: 14px;
+      opacity: 0.4;
+    }
+
+    .value {
+      font-size: 14px;
+      width: 100%;
+      flex-shrink: 0;
+      word-break: break-word;
     }
   }
 
@@ -149,6 +177,7 @@
       color: #ffffff;
       background: #164aff;
       border-radius: 23px;
+      cursor: pointer;
       box-shadow: 0px 2px 4px 0px rgba(22, 74, 255, 0.58);
     }
   }

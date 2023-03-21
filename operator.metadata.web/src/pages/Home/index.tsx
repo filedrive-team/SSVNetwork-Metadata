@@ -15,7 +15,7 @@ import _ from 'lodash';
 import { Image } from 'antd';
 import copy from 'copy-to-clipboard';
 import notify from '@/component/Notification';
-import { type } from 'os';
+
 const List = (props) => {
   const { isSearch, data, searchData } = props;
   switch (isSearch) {
@@ -58,10 +58,6 @@ const Home = () => {
       key: 'owner_address',
     },
     {
-      name: 'Description',
-      key: 'description',
-    },
-    {
       name: 'Consensus(Eth2) node client',
       key: 'eth2_node_client',
     },
@@ -99,6 +95,14 @@ const Home = () => {
     },
   ];
 
+  const _mev_bost_enabled =
+    homeStore.showOperatorInfoData &&
+    homeStore.showOperatorInfoData['mev_bost_enabled'];
+  const _mev_relays_supported =
+    homeStore.showOperatorInfoData &&
+    homeStore.showOperatorInfoData['relays_supported'];
+  const _value = _mev_bost_enabled ? _mev_relays_supported : '';
+
   return (
     <div className={styles.homeWrap}>
       <Banner></Banner>
@@ -116,45 +120,75 @@ const Home = () => {
 
           <div className={classNames(styles.operatorDialogWrap)}>
             <div className={classNames(styles.topWrap)}>
-              <div className={styles.left}>
-                <div>
-                  <div className={classNames(styles.title)}>Operator ID</div>
-                  <div className={classNames(styles.value)}>
-                    {homeStore.showOperatorInfoData?.operator_id}
+              <div className={classNames(styles.baseInfo)}>
+                <div className={styles.left}>
+                  <div>
+                    <div className={classNames(styles.title)}>Operator ID</div>
+                    <div className={classNames(styles.value)}>
+                      {homeStore.showOperatorInfoData?.operator_id}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={classNames(styles.title)}>
+                      Operator Name
+                    </div>
+                    <div className={classNames(styles.value)}>
+                      {homeStore.showOperatorInfoData?.name}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className={classNames(styles.title)}>Operator Name</div>
-                  <div className={classNames(styles.value)}>
-                    {homeStore.showOperatorInfoData?.name}
-                  </div>
+                <div className={styles.right}>
+                  <Image
+                    width={50}
+                    src={
+                      process.env['REACT_APP_GATEWAY']! +
+                        homeStore.showOperatorInfoData?.logo ?? ''
+                    }
+                    placeholder={<img src={OperatorInfoDialogLogo} alt="" />}
+                    fallback={OperatorInfoDialogLogo}
+                    preview={false}
+                  />
                 </div>
               </div>
-              <div className={styles.right}>
-                <Image
-                  width={50}
-                  src={
-                    process.env['REACT_APP_GATEWAY']! +
-                      homeStore.showOperatorInfoData?.logo ?? ''
-                  }
-                  placeholder={<img src={OperatorInfoDialogLogo} alt="" />}
-                  fallback={OperatorInfoDialogLogo}
-                />
+              <div className={styles.description}>
+                <div className={classNames(styles.title)}>Desctription</div>
+                <div className={classNames(styles.value)}>
+                  {homeStore.showOperatorInfoData?.description || '--'}
+                </div>
               </div>
             </div>
             <div className={classNames(styles.centerWrap)}>
               {dialogData.map((value, index) => {
+                let _value_ =
+                  (homeStore.showOperatorInfoData &&
+                    homeStore.showOperatorInfoData[value.key]) ||
+                  '--';
+                if ((value.key = 'location')) {
+                  const _i = _value_.includes('|');
+                  if (_i) {
+                    const _arr = _value_.split('|');
+                    _value_ = _arr[0];
+                  }
+                }
                 return (
                   <div key={index} className={classNames(styles.centerItem)}>
                     <div className={classNames(styles.title)}>{value.name}</div>
-                    <div className={classNames(styles.value)}>
-                      {(homeStore.showOperatorInfoData &&
-                        homeStore.showOperatorInfoData[value.key]) ||
-                        '--'}
+                    <div
+                      className={classNames(styles.value)}
+                      title={_value_ || '--'}
+                    >
+                      {_value_}
                     </div>
                   </div>
                 );
               })}
+            </div>
+
+            <div className={classNames(styles.rowWrap)}>
+              <div className={classNames(styles.title)}>MEV Relay</div>
+              <div className={classNames(styles.value)} title={_value || '--'}>
+                {_value || '--'}
+              </div>
             </div>
             <div className={classNames(styles.bottomWrap)}>
               <div

@@ -22,4 +22,6 @@ export interface OperatorInfo {
   website_url: string;
   discord_url: string;
   telegram_url: string;
+  mev_bost_enabled: boolean;
+  relays_supported: Array;
 }

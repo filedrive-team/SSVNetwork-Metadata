@@ -98,7 +98,7 @@
 
     @media screen and (min-width: 961px) {
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(6, 1fr);
+      grid-template-rows: repeat(7, 1fr);
     }
 
     grid-gap: 4px 100px;
@@ -111,12 +111,39 @@
       position: relative;
 
       :global {
+        .ant-row {
+          width: 100%;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+
+          .ant-col {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+        }
+
         .ant-form-item {
           width: 100%;
 
           .ant-form-item-explain-error {
             display: flex;
           }
+
+          .ant-input-textarea-show-count {
+            &::after {
+              color: var(--color-ffffff-60);
+            }
+          }
+        }
+
+        .label {
+          display: flex;
+          content: attr(data-title);
+          color: var(--color-ffffff-60);
+          font-size: 14px;
+          text-align: left;
+          padding-bottom: 5px;
+          text-align: left;
         }
       }
 
@@ -125,7 +152,9 @@
         content: attr(data-title);
         color: var(--color-ffffff-60);
         font-size: 14px;
-        padding-bottom: 5px;
+        padding-bottom: 5px !important;
+        text-align: left;
+        height: 28px;
       }
 
       & > :first-child:after {
@@ -139,13 +168,99 @@
       }
 
       :global {
-        .ant-input {
+        .ant-select {
           position: relative;
           height: 45px;
           background: #373840;
           color: white;
+          border: 1px solid #747474;
+          width: 100%;
+
+          .ant-select-arrow {
+            color: #fff;
+          }
+
+          .ant-select-clear {
+            color: #fff;
+            background-color: #373840;
+          }
+
+          &.ant-select-multiple {
+            .ant-select-selector {
+              .ant-select-selection-item {
+                background-color: #373840;
+                line-height: 24px;
+
+                .ant-select-selection-item-remove {
+                  color: #fff;
+                }
+              }
+
+              .ant-select-selection-search-input {
+                height: 28px;
+                line-height: 28px;
+              }
+            }
+          }
+
+          .ant-select-selector {
+            height: 100%;
+            background-color: #373840;
+            border: none;
+
+            .ant-select-selection-item {
+              line-height: 45px;
+              text-align: left;
+            }
+
+            .ant-select-selection-search-input {
+              height: 45px;
+              line-height: 45px;
+            }
+          }
+        }
+
+        .ant-input {
+          position: relative;
+          height: 45px !important;
+          background: #373840;
+          color: white;
           border-color: #747474;
           width: 100%;
+          min-height: 45px !important;
+          max-height: 45px !important;
+        }
+
+        .ant-checkbox-checked {
+          &::after {
+            border: 1px solid #305fff;
+          }
+        }
+
+        .ant-checkbox {
+          position: relative;
+          height: 45px;
+          background: #373840;
+          color: white;
+          border: 1px solid #747474;
+          width: 45px;
+          top: 0;
+
+          .ant-checkbox-input {
+            width: 100%;
+            height: 100%;
+          }
+
+          .ant-checkbox-inner {
+            width: 100%;
+            height: 100%;
+            background: #373840;
+            border: none;
+
+            &::after {
+              left: 41%;
+            }
+          }
         }
 
         .ant-input:focus {
@@ -190,6 +305,22 @@
         background: var(--color-164AFF);
         box-shadow: 0px 2px 4px 0px rgba(22, 74, 255, 0.58);
         border-color: transparent;
+      }
+    }
+  }
+}
+
+:global {
+  .custom-input-wrap {
+    input {
+      flex: 1;
+
+      &:hover {
+        border-color: #305fff;
+      }
+
+      &:focus {
+        border-color: #305fff;
       }
     }
   }
