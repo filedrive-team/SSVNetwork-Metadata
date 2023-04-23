@@ -1,0 +1,310 @@
+basePath: /api/v1
+definitions:
+  CommonErrorResp:
+    properties:
+      code:
+        example: 400
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  CommonOkResp:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  ListOperatorRes:
+    properties:
+      cid:
+        type: string
+      infos:
+        items:
+          $ref: '#/definitions/OperatorInfo'
+        type: array
+      total:
+        type: integer
+    type: object
+  ListQueryOperatorRes:
+    properties:
+      infos:
+        items:
+          $ref: '#/definitions/OperatorInfo'
+        type: array
+    type: object
+  OperatorInfo:
+    properties:
+      cid:
+        type: string
+      cloud_provider:
+        type: string
+      description:
+        type: string
+      discord_url:
+        type: string
+      eth1_node_client:
+        type: string
+      eth2_node_client:
+        type: string
+      linkedin_url:
+        type: string
+      location:
+        description: extern info
+        type: string
+      logo:
+        type: string
+      name:
+        type: string
+      operator_id:
+        description: base info
+        type: integer
+      owner_address:
+        type: string
+      signature:
+        type: string
+      telegram_url:
+        type: string
+      timestamp:
+        type: integer
+      twitter_url:
+        type: string
+      website_url:
+        type: string
+    type: object
+  OperatorParams:
+    properties:
+      data:
+        default: '{"domain":{"name":"SSV","chainId":"0x5"},"message":{"data":"{\"operator_id\":604,\"owner_address\":\"0xCd14f1aE89De9b9B7bAe9d7988d0Ad26F5DCCb11\",\"location\":\"\",\"cloud_provider\":\"\",\"eth1_node_client\":\"\",\"eth2_node_client\":\"\",\"description\":\"\",\"website_url\":\"\",\"twitter_url\":\"\",\"linkedin_url\":\"\",\"logo\":\"QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH\",\"timestamp\":1665395268129}"},"primaryType":"Sign","types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Sign":[{"name":"data","type":"string"}]}}'
+        type: string
+      signature:
+        default: 4b10fd1f4ae8238befa681eb56bed774120a67405b9854670275919a4a27a0573a32711426770bc8d25623f08974eca3cdd6b1d8561f1f23d4ff5a882a08015b1b
+        type: string
+    required:
+    - data
+    - signature
+    type: object
+info:
+  contact:
+    email: filedriveteam@outlook.com
+    name: FileDrive
+    url: https://filedrive.io/
+  title: SSV Operator API
+  version: "1.0"
+paths:
+  /operator/getoperator:
+    get:
+      description: get getoperator
+      parameters:
+      - default: "true"
+        description: Whether the interface call is Swagger UI
+        in: header
+        name: is_swag
+        type: string
+      - default: testnet
+        description: net type
+        enum:
+        - mainnet
+        - testnet
+        in: header
+        name: NetType
+        required: true
+        type: string
+      - default: "604"
+        description: Operator Id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/CommonOkResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/OperatorInfo'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: getoperator
+  /operator/getoperatorbykeyword:
+    get:
+      description: get operator by keyword
+      parameters:
+      - default: "true"
+        description: Whether the interface call is Swagger UI
+        in: header
+        name: is_swag
+        type: string
+      - default: testnet
+        description: net type
+        enum:
+        - mainnet
+        - testnet
+        in: header
+        name: NetType
+        required: true
+        type: string
+      - default: t
+        description: keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/CommonOkResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/ListQueryOperatorRes'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: GetOperatorByKeyword
+  /operator/gettimestamp:
+    get:
+      description: get timestamp
+      parameters:
+      - default: "true"
+        description: Whether the interface call is Swagger UI
+        in: header
+        name: is_swag
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CommonOkResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: timestamp
+  /operator/list:
+    get:
+      description: listOperator
+      parameters:
+      - default: testnet
+        description: net type
+        enum:
+        - mainnet
+        - testnet
+        in: header
+        name: NetType
+        required: true
+        type: string
+      - default: 0
+        description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - default: 10
+        description: size
+        in: query
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/CommonOkResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/ListOperatorRes'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: listOperator
+  /operator/update:
+    post:
+      consumes:
+      - application/json
+      description: UpdateOperator
+      parameters:
+      - default: testnet
+        description: net type
+        enum:
+        - mainnet
+        - testnet
+        in: header
+        name: NetType
+        required: true
+        type: string
+      - default: "true"
+        description: Whether the interface call is Swagger UI
+        in: header
+        name: is_swag
+        type: string
+      - description: Update operator information
+        in: body
+        name: OperatorParams
+        required: true
+        schema:
+          $ref: '#/definitions/OperatorParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: update operator response
+          schema:
+            allOf:
+            - $ref: '#/definitions/CommonOkResp'
+            - properties:
+                data:
+                  $ref: '#/definitions/OperatorInfo'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: UpdateOperator
+  /operator/uploadimage:
+    post:
+      consumes:
+      - multipart/form-data
+      description: upload image
+      parameters:
+      - description: The maximum number of uploaded files cannot be greater than 5
+          MiB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CommonOkResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/CommonErrorResp'
+      summary: upload
+swagger: "2.0"

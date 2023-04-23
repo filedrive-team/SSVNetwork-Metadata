@@ -1,0 +1,22 @@
+[app]
+env = "debug"
+
+[server]
+host = "localhost"
+port = 9001
+
+[eth.mainnet]
+SsvNetWorkAddress = ""
+url = "wss://localhost:8546"
+[eth.testnet]
+SsvNetWorkAddress = "0x8dB45282d7C4559fd093C26f677B3837a5598914"
+url = "wss://goerli.infura.io/ws/v3/ae5164f679134b09a545b783c5457134"
+
+[database.mainnet]
+
+[database.testnet]
+url = "root:Aa112211@tcp(localhost:3306)/ssv_testnet?parseTime=true"
+
+[ipfs]
+NftStorageToken = ""
+url = "localhost:5001"
