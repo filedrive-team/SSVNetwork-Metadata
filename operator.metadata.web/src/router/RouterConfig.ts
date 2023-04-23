@@ -17,22 +17,10 @@ const Routes: RouteModel[] = [
     component: lazy(() => import('@/pages/Home')),
   },
   {
-    name: 'detail',
-    path: RouterPath.detail,
-    auth: true,
-    component: lazy(() => import('@/pages/Detail')),
-  },
-  {
     name: 'profile',
     path: RouterPath.profile,
     auth: false,
     component: lazy(() => import('@/pages/Profile')),
-  },
-  {
-    name: 'auth',
-    path: RouterPath.auth,
-    auth: false,
-    component: lazy(() => import('@/pages/Auth')),
   },
   {
     name: '404',

@@ -10,6 +10,7 @@ class HomeStore {
   searching: boolean = false;
   showOperatorInfo: boolean = false;
   showOperatorInfoData?: OperatorInfo;
+  page: number = 0;
 
   constructor() {
     makeObservable(this, {
@@ -17,10 +18,17 @@ class HomeStore {
       searchData: observable,
       isSearch: observable,
       searching: observable,
+      page: observable,
       showOperatorInfo: observable,
       showOperatorInfoData: observable,
       getOperatorData: action,
       getOperatorByKeyword: action,
+    });
+  }
+
+  SET_PAGE(value: number) {
+    runInAction(() => {
+      this.page = value;
     });
   }
 
@@ -44,10 +52,7 @@ class HomeStore {
   }
 
   async getOperatorData(_params?: { page: number; size: number }) {
-    const response = await _getOperatorList({
-      page: 0,
-      size: 1000,
-    });
+    const response = await _getOperatorList(_params);
     if (response.code === 200) {
       runInAction(() => {
         this.data = response.data;

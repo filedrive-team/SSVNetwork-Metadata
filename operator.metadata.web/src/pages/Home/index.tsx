@@ -12,9 +12,11 @@ import OperatorInfoDialogLogo from '@/assets/png/home/avatar_default.png';
 import { useHistory } from 'react-router';
 import { RouterPath } from '@/router/RouterConfig';
 import _ from 'lodash';
-import { Image } from 'antd';
+import { Image, Pagination } from 'antd';
 import copy from 'copy-to-clipboard';
 import notify from '@/component/Notification';
+
+const PAGE_SIZE = 50;
 
 const List = (props) => {
   const { isSearch, data, searchData } = props;
@@ -49,7 +51,10 @@ const List = (props) => {
 const Home = () => {
   const history = useHistory();
   useEffect(() => {
-    homeStore.getOperatorData();
+    homeStore.getOperatorData({
+      page: homeStore.page,
+      size: PAGE_SIZE,
+    });
   }, []);
 
   const dialogData = [
@@ -94,6 +99,14 @@ const Home = () => {
       key: 'telegram_url',
     },
   ];
+
+  const pageOnChange = (page, pageSize) => {
+    homeStore.SET_PAGE(page);
+    homeStore.getOperatorData({
+      page: page - 1,
+      size: PAGE_SIZE,
+    });
+  };
 
   const _mev_bost_enabled =
     homeStore.showOperatorInfoData &&
@@ -227,13 +240,30 @@ const Home = () => {
       !homeStore.searching ? (
         <Empty />
       ) : (
-        <div className={classNames(styles.cardsWrap)}>
-          <List
-            data={homeStore.data}
-            isSearch={homeStore.isSearch}
-            searchData={homeStore.searchData}
-          />
-        </div>
+        <>
+          <div className={classNames(styles.cardsWrap)}>
+            <List
+              data={homeStore.data}
+              isSearch={homeStore.isSearch}
+              searchData={homeStore.searchData}
+            />
+          </div>
+          {!homeStore.isSearch ? (
+            <>
+              <Pagination
+                defaultCurrent={1}
+                total={homeStore.data.total}
+                defaultPageSize={PAGE_SIZE}
+                showSizeChanger={false}
+                onChange={pageOnChange}
+                hideOnSinglePage={true}
+              />
+              <div style={{ paddingBottom: '20px' }}></div>
+            </>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </div>
   );

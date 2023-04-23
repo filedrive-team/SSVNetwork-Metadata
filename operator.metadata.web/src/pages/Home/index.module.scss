@@ -1,6 +1,7 @@
 .cardsWrap {
   display: grid;
   margin: auto;
+  padding-bottom: 20px;
 
   @media screen and (max-width: 960px) {
     margin-left: 100rem;

@@ -429,7 +429,22 @@ const Profile = (props) => {
     operatorInfo.timestamp = Date.now();
     const _sign = {
       data: JSON.stringify({
-        ...operatorInfo,
+        description: operatorInfo.description,
+        eth1_node_client: operatorInfo.eth1_node_client,
+        eth2_node_client: operatorInfo.eth2_node_client,
+        linkedin_url: operatorInfo.linkedin_url,
+        location: operatorInfo.location,
+        logo: operatorInfo.logo,
+        name: operatorInfo.name,
+        operator_id: operatorInfo.operator_id,
+        owner_address: operatorInfo.owner_address,
+        cloud_provider: operatorInfo.cloud_provider,
+        timestamp: operatorInfo.timestamp,
+        twitter_url: operatorInfo.twitter_url,
+        website_url: operatorInfo.website_url,
+        discord_url: operatorInfo.discord_url,
+        telegram_url: operatorInfo.telegram_url,
+        mev_bost_enabled: operatorInfo.mev_bost_enabled,
         relays_supported: operatorInfo.relays_supported.join(','),
       }),
     };
@@ -438,7 +453,7 @@ const Profile = (props) => {
 
     const msgParams = {
       domain: {
-        name: 'SSV',
+        name: 'ssv.network',
         chainId: '0x5',
       },
       message: _sign,
